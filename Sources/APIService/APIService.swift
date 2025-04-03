@@ -1,6 +1,14 @@
+import Foundation
+
 public class APIService {
     
-    public init() {
+    @MainActor public static let shared = APIService()
+    
+    private init() {
         
+    }
+    
+    public func start() {
+        print("IT STARTED MAN!")
     }
 }
