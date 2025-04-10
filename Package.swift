@@ -6,7 +6,8 @@ import PackageDescription
 let package = Package(
     name: "MCAServiceKit",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v15),
+        .macOS(.v13)
     ],
     products: [
         .library(
