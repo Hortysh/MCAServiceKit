@@ -1,6 +1,6 @@
 import Foundation
 
-enum APIError: LocalizedError {
+public enum APIError: LocalizedError {
     case badRequest(description: String)
     case decodingError(description: String)
     case networkFailure(URLError)
@@ -8,7 +8,7 @@ enum APIError: LocalizedError {
     case invalidResponse
     case unknown(Error)
     
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .badRequest(let description):
             return "Неверный запрос: \(description)"

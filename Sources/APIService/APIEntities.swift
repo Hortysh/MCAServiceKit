@@ -1,5 +1,5 @@
 import Foundation
 
-enum Request {}
+public enum Request {}
 
-enum Response {}
+public enum Response {}

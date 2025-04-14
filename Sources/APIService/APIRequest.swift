@@ -1,6 +1,6 @@
 import Foundation
 
-protocol APIRequest {
+public protocol APIRequest {
     associatedtype ReturnType: Decodable
     
     // Почитать про структуру ссылки!!!
@@ -15,7 +15,7 @@ protocol APIRequest {
 }
 
 // MARK: - APIRequest Default Property Implementations
-extension APIRequest {
+public extension APIRequest {
     var scheme: URLScheme {
         .https
     }
@@ -30,7 +30,7 @@ extension APIRequest {
 }
 
 // MARK: - APIRequest Default Methods Implementations
-extension APIRequest {
+public extension APIRequest {
     func asURLRequest(for config: APIConfiguration, with option: QueryItemOption) -> URLRequest? {
         var components = URLComponents()
         components.scheme = config.scheme.rawValue // зачем схема и в конфиге и в реквесте???
@@ -63,10 +63,10 @@ extension APIRequest {
     }
 }
 
-struct QueryItemOption {
-    let queryItems: [URLQueryItem]
+public struct QueryItemOption : Sendable {
+    public let queryItems: [URLQueryItem]
     
-    init(_ queryItems: [URLQueryItem]) {
+    private init(_ queryItems: [URLQueryItem]) {
         self.queryItems = queryItems
     }
     
@@ -79,11 +79,11 @@ struct QueryItemOption {
     }
 }
 
-enum URLScheme: String {
+public enum URLScheme: String, Sendable {
     case https
 }
 
-enum HTTPMethod: String {
+public enum HTTPMethod: String, Sendable {
     case get = "GET"
     case post = "POST"
     case put = "PUT"

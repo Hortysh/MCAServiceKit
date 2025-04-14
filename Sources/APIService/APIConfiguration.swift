@@ -1,16 +1,25 @@
 import Foundation
 
-struct APIConfiguration {
-    let scheme: URLScheme
-    let host: String
-    let path: String
-    let port: Int?
-    let apiKey: String
-    let securityPolicy: SecurityPolicy
+public struct APIConfiguration: Sendable {
+    public let scheme: URLScheme
+    public let host: String
+    public let path: String
+    public let port: Int?
+    public let apiKey: String
+    public let securityPolicy: SecurityPolicy
+    
+    public init(scheme: URLScheme, host: String, path: String, port: Int?, apiKey: String, securityPolicy: SecurityPolicy) {
+        self.scheme = scheme
+        self.host = host
+        self.path = path
+        self.port = port
+        self.apiKey = apiKey
+        self.securityPolicy = securityPolicy
+    }
 }
 
 // Почему я могу сделать static stored property в extension???
-extension APIConfiguration {
+public extension APIConfiguration {
     static let newsAPI = APIConfiguration(
         scheme: .https,
         host: "newsapi.org",
@@ -21,7 +30,7 @@ extension APIConfiguration {
     )
 }
 
-enum SecurityPolicy: Equatable {
+public enum SecurityPolicy: Equatable, Sendable {
     case none
     case sslPinning(publicKeyHash: String)
 }

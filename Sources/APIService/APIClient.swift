@@ -3,26 +3,26 @@ import Combine
 import CommonCrypto
 
 @available(iOS 15, macOS 13, *)
-protocol APIFetching {
+public protocol APIFetching {
     func fetch<R: APIRequest>(_ request: R) -> AnyPublisher<R.ReturnType, Error>
     func fetch<R: APIRequest>(_ request: R, with options: QueryItemOption) -> AnyPublisher<R.ReturnType, Error>
 }
 
-final class APIClient: NSObject {
-    let config: APIConfiguration
+public final class APIClient: NSObject {
+    public let config: APIConfiguration
     
-    init(config: APIConfiguration = .newsAPI) {
+    public init(config: APIConfiguration = .newsAPI) {
         self.config = config
     }
 }
 
 @available(iOS 15, macOS 13, *)
 extension APIClient: APIFetching {
-    func fetch<R: APIRequest>(_ request: R) -> AnyPublisher<R.ReturnType, Error> {
+    public func fetch<R: APIRequest>(_ request: R) -> AnyPublisher<R.ReturnType, Error> {
         fetch(request, with: .none)
     }
     
-    func fetch<R: APIRequest>(_ request: R, with options: QueryItemOption) -> AnyPublisher<R.ReturnType, Error> {
+    public func fetch<R: APIRequest>(_ request: R, with options: QueryItemOption) -> AnyPublisher<R.ReturnType, Error> {
         guard let urlRequest = request.asURLRequest(for: config, with: options) else {
             print("❌ URLRequest failed! Не удалось сформировать URL-запрос ")
             let error = APIError.badRequest(description: "Не удалось сформировать URL-запрос")
@@ -72,7 +72,7 @@ extension APIClient: APIFetching {
 }
 
 extension APIClient: URLSessionDelegate {
-    func urlSession(_ session: URLSession,
+    public func urlSession(_ session: URLSession,
                     didReceive challenge: URLAuthenticationChallenge,
                     completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         guard config.securityPolicy != .none else {
@@ -82,7 +82,8 @@ extension APIClient: URLSessionDelegate {
         
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
               let serverTrust = challenge.protectionSpace.serverTrust,
-              let certificate = SecTrustGetCertificateAtIndex(serverTrust, 0) else {
+              let certificates = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate],
+              let certificate = certificates.first else {
             completionHandler(.performDefaultHandling, nil)
             return
         }
