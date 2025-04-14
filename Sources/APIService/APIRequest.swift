@@ -70,9 +70,9 @@ public struct QueryItemOption : Sendable {
         self.queryItems = queryItems
     }
     
-    static let none = QueryItemOption([])
+    public static let none = QueryItemOption([])
     
-    static func with(parameters: [String: String]) -> QueryItemOption {
+    public static func with(parameters: [String: String]) -> QueryItemOption {
         let items = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         
         return QueryItemOption(items)
