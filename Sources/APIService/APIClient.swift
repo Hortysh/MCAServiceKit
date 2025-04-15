@@ -72,33 +72,33 @@ extension APIClient: APIFetching {
 }
 
 extension APIClient: URLSessionDelegate {
-//    public func urlSession(_ session: URLSession,
-//                    didReceive challenge: URLAuthenticationChallenge,
-//                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-//        guard config.securityPolicy != .none else {
-//            completionHandler(.performDefaultHandling, nil)
-//            return
-//        }
-//        
-//        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-//              let serverTrust = challenge.protectionSpace.serverTrust,
-//              let certificates = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate],
-//              let certificate = certificates.first else {
-//            completionHandler(.performDefaultHandling, nil)
-//            return
-//        }
-//        
-//        let serverCertificateData = SecCertificateCopyData(certificate) as Data
-//        let hash = sha256(data: serverCertificateData)
-//        
-//        if case let SecurityPolicy.sslPinning(publicKeyHash: pinnedHash) = config.securityPolicy, hash == pinnedHash {
-//            let credential = URLCredential(trust: serverTrust)
-//            completionHandler(.useCredential, credential)
-//        } else {
-//            print("❌ SSL Pinning failed! Сертификат не совпадает.")
-//            completionHandler(.cancelAuthenticationChallenge, nil)
-//        }
-//    }
+    public func urlSession(_ session: URLSession,
+                    didReceive challenge: URLAuthenticationChallenge,
+                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        guard config.securityPolicy != .none else {
+            completionHandler(.performDefaultHandling, nil)
+            return
+        }
+        
+        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+              let serverTrust = challenge.protectionSpace.serverTrust,
+              let certificates = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate],
+              let certificate = certificates.first else {
+            completionHandler(.performDefaultHandling, nil)
+            return
+        }
+        
+        let serverCertificateData = SecCertificateCopyData(certificate) as Data
+        let hash = sha256(data: serverCertificateData)
+        
+        if case let SecurityPolicy.sslPinning(publicKeyHash: pinnedHash) = config.securityPolicy, hash == pinnedHash {
+            let credential = URLCredential(trust: serverTrust)
+            completionHandler(.useCredential, credential)
+        } else {
+            print("❌ SSL Pinning failed! Сертификат не совпадает.")
+            completionHandler(.cancelAuthenticationChallenge, nil)
+        }
+    }
 }
 
 private extension APIClient {

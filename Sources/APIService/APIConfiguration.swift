@@ -18,7 +18,6 @@ public struct APIConfiguration: Sendable {
     }
 }
 
-// Почему я могу сделать static stored property в extension???
 public extension APIConfiguration {
     static let newsAPI = APIConfiguration(
         scheme: .https,
@@ -26,7 +25,7 @@ public extension APIConfiguration {
         path: "",
         port: nil,
         apiKey: "c4273f93c3f24a6ab28e8a852a7f44b1",
-        securityPolicy: .sslPinning(publicKeyHash: "yXb31MO6EiY6g4o/D0GVNLFxH5MOR6BOa/ojJkmYt9w=")
+        securityPolicy: .sslPinning(publicKeyHash: "+f3c7aFwS1+CG4XiF/aSlWrmLtLGrQp7ol63Kd7haqI=")
     )
 }
 

@@ -3,8 +3,6 @@ import Foundation
 public protocol APIRequest {
     associatedtype ReturnType: Decodable
     
-    // Почитать про структуру ссылки!!!
-    var scheme: URLScheme { get }
     var path: String { get }
     var method: HTTPMethod  { get }
     var contentType: String { get }
@@ -16,10 +14,6 @@ public protocol APIRequest {
 
 // MARK: - APIRequest Default Property Implementations
 public extension APIRequest {
-    var scheme: URLScheme {
-        .https
-    }
-    
     var method: HTTPMethod {
         .get
     }
@@ -33,15 +27,15 @@ public extension APIRequest {
 public extension APIRequest {
     func asURLRequest(for config: APIConfiguration, with option: QueryItemOption) -> URLRequest? {
         var components = URLComponents()
-        components.scheme = config.scheme.rawValue // зачем схема и в конфиге и в реквесте???
+        components.scheme = config.scheme.rawValue
         components.host = config.host
         components.port = config.port
-        components.path = config.path + path // зачем путь и тут и там???
+        components.path = config.path + path
         
         var queryItems = [URLQueryItem(name: "apikey", value: config.apiKey)]
         queryItems.append(contentsOf: createQueryItems())
         queryItems.append(contentsOf: option.queryItems)
-        components.queryItems = queryItems.isEmpty ? nil : queryItems // добавлять проверку на пустой масив или нет???
+        components.queryItems = queryItems
         
         guard let url = components.url else {
             return nil
